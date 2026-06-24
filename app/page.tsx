@@ -1,5 +1,5 @@
-import AttendanceDashboard from "./Attandance/page";
-import Dashboard from "./Dashboard/page";
+import AttendanceDashboard from "./attendance/page";
+import Dashboard from "./dashboard/page";
 
 
 export default function Home() {
