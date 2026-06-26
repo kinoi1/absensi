@@ -105,11 +105,6 @@ export default function Sidebar() {
             <CheckSquare className="w-4 h-4" /> {!collapsed && "Task"}
           </Link>
 
-          {/* Menu Schedule */}
-          <Link href="/schedule" className={menuClass("/schedule", collapsed)}>
-            <Calendar className="w-4 h-4" /> {!collapsed && "Schedule"}
-          </Link>
-
           {/* Menu Attendance */}
           <Link
             href="/attendance"
