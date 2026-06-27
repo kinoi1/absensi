@@ -1,44 +1,73 @@
 "use client";
-import React, { useEffect } from "react";
-import { Calendar, Flag, Plus, Shield, Tag, X, Upload, User } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Calendar,
+  Flag,
+  Plus,
+  Shield,
+  Tag,
+  X,
+  Upload,
+  User,
+} from "lucide-react";
+import SearchableDropdown from "../components/tasks/searchDropdown";
 
 interface CreateTaskModalProps {
   open: boolean;
-  onClose: () => void;
+  onClose?: () => void;
 }
-
+const cities = [
+  { value: "jakarta", label: "Jakarta" },
+  { value: "bandung", label: "Bandung" },
+  { value: "surabaya", label: "Surabaya" },
+  { value: "yogyakarta", label: "Yogyakarta" },
+];
+interface SearchableDropdownProps {
+  options: Option[];
+  onSelect?: (option: Option) => void;
+  onClose?: () => void;
+}
 export default function CreateTaskModal({
   open,
   onClose,
 }: CreateTaskModalProps) {
-  
-  // Mencegah background HTML ikut ter-scroll saat modal terbuka
+  const dropdownRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
     }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+        onClose?.();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
       document.body.style.overflow = "unset";
     };
-  }, [open]);
+      
+  }, [open, onClose]);
 
   if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      {/* PERUBAHAN DI SINI:
-        1. Mengubah h-[90vh] menjadi max-h-[90vh] agar fleksibel.
-        2. Menambahkan flex flex-col agar Header dan Konten terpisah secara vertikal dengan benar.
-      */}
       <div className="w-full max-w-5xl max-h-[90vh] rounded-xl bg-zinc-900 border border-zinc-800 shadow-2xl flex flex-col">
-        
         {/* Header (Tetap diam di atas, tidak ikut ter-scroll) */}
         <div className="flex items-start justify-between p-6 flex-shrink-0">
           <input
             type="text"
-            placeholder="Untitled"
+            placeholder="Nama Task"
             className="text-4xl font-bold bg-transparent outline-none text-white placeholder:text-zinc-500 w-full mr-4"
           />
 
@@ -63,10 +92,6 @@ export default function CreateTaskModal({
           </div>
         </div>
 
-        {/* PERUBAHAN DI SINI:
-          Menambahkan flex-1 dan min-h-0 agar area ini mengambil sisa ruang yang ada 
-          dan mengaktifkan scroll internalnya saat konten melebihi batas max-h modal.
-        */}
         <div className="overflow-y-auto flex-1 min-h-0">
           {/* Properties */}
           <div className="px-6">
@@ -166,6 +191,24 @@ function PropertyRow({
   label: string;
   buttonText: string;
 }) {
+  const [showDropdown, setShowDropdown] = useState(false);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+        onClose?.();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
     <div className="flex items-center gap-6">
       <div className="flex items-center gap-2 w-40 text-zinc-400">
@@ -173,10 +216,29 @@ function PropertyRow({
         <span>{label}</span>
       </div>
 
-      <button className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-800 text-zinc-300 hover:bg-zinc-700">
-        <Plus size={14} />
-        {buttonText}
-      </button>
+      {!showDropdown ? (
+        <button
+          onClick={() => setShowDropdown(true)}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+        >
+          <Plus size={14} />
+          Tambah Kota
+        </button>
+      ) : (
+        <SearchableDropdown
+          options={cities}
+          onSelect={(item) => {
+            console.log(item);
+
+            // Kembalikan ke button setelah memilih
+            setShowDropdown(false);
+          }}
+          onClose={() => {
+            // Kembalikan ke button saat dropdown ditutup
+            setShowDropdown(false);
+          }}
+        />
+      )}
     </div>
   );
 }

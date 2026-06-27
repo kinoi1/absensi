@@ -11,8 +11,9 @@ import {
 } from "lucide-react";
 interface BoardProps {
   onCreateTask: () => void;
+  onCompleteTask: (columnId: string) => void;
 }
-export default function Board({ onCreateTask }: BoardProps) {
+export default function Board({ onCreateTask, onCompleteTask }: BoardProps) {
   const boardColumns = [
     {
       id: "new",
@@ -118,7 +119,12 @@ export default function Board({ onCreateTask }: BoardProps) {
                       {isCompletedCol ? (
                         <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 fill-emerald-950/30" />
                       ) : (
-                        <div className="w-5 h-5 rounded-full border-2 border-gray-500 flex items-center justify-center flex-shrink-0" />
+                        <div
+                          onClick={() => {
+                            onCompleteTask(column.id);
+                          }}
+                          className="w-5 h-5 rounded-full border-2 border-gray-500 flex items-center justify-center flex-shrink-0"
+                        />
                       )}
 
                       <span

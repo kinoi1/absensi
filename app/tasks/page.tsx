@@ -11,7 +11,24 @@ import {
 import Board from "./board";
 import ListTask from "./list";
 import CreateTaskModal from "./modal";
+import Swal from 'sweetalert2';
 
+const handleCompleteTask = async () => {
+  const result = await Swal.fire({
+    title: 'Selesaikan Task?',
+    text: 'Apakah Anda ingin menyelesaikan task ini?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Ya',
+    cancelButtonText: 'Batal',
+    confirmButtonColor: '#08c51e',
+  });
+
+  if (result.isConfirmed) {
+    // Logic menyelesaikan task
+    console.log('Task selesai');
+  }
+};
 export default function Schedule() {
   const [viewMode, setViewMode] = useState<"list" | "board">("board");
   const [showCreateTask, setShowCreateTask] = useState(false);
@@ -75,11 +92,11 @@ export default function Schedule() {
       </header>
 
       {viewMode === "board" && (
-        <Board onCreateTask={() => setShowCreateTask(true)} />
+        <Board onCreateTask={() => setShowCreateTask(true)} onCompleteTask={handleCompleteTask}/>
       )}
 
       {viewMode === "list" && (
-        <ListTask onCreateTask={() => setShowCreateTask(true)} />
+        <ListTask onCreateTask={() => setShowCreateTask(true)} onCompleteTask={handleCompleteTask}/>
       )}
 
       <CreateTaskModal
