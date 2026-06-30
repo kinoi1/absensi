@@ -10,7 +10,7 @@ import {
   Upload,
   User,
 } from "lucide-react";
-import SearchableDropdown from "../components/tasks/searchDropdown";
+import SearchableDropdown from "../../components/tasks/searchDropdown";
 
 interface CreateTaskModalProps {
   open: boolean;

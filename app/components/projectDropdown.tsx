@@ -12,11 +12,11 @@ export default function ProjectDropdown({
 
   // Contoh 5 data dropdown untuk menu sidebar
   const projects = [
-    { id: 1, name: "E-Commerce App", href: "#", count: 2 },
-    { id: 2, name: "Company Profile", href: "#", count: 1 },
-    { id: 3, name: "Marketing Campaign", href: "#", count: 0 },
-    { id: 4, name: "UI/UX Redesign", href: "#", count: 3 },
-    { id: 5, name: "Mobile Banking", href: "#", count: 0 },
+    { id: 1, name: "E-Commerce App", href: "/projects/1", count: 2 },
+    { id: 2, name: "Company Profile", href: "/projects/2", count: 1 },
+    { id: 3, name: "Marketing Campaign", href: "/projects/3", count: 0 },
+    { id: 4, name: "UI/UX Redesign", href: "/projects/4", count: 3 },
+    { id: 5, name: "Mobile Banking", href: "/projects/5", count: 0 },
   ];
 
   return (
